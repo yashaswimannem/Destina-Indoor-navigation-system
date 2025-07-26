@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index Indoor Navigation System </title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+        }
+
+        #controls {
+            margin: 10px;
+            text-align: center;
+        }
+
+        select,
+        button {
+            padding: 8px;
+            font-size: 16px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="controls">
+        <label for="source">Source:</label>
+        <select id="source"></select>
+
+        <label for="destination">Destination:</label>
+        <select id="destination"></select>
+
+        <button onclick="findShortestPath()">Find Path</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map', {
+            crs: L.CRS.Simple,
+            minZoom: -2,
+            maxZoom: 1
+        });
+
+        var imageWidth = 1200, imageHeight = 900;
+        var bounds = [[0, 0], [imageHeight, imageWidth]];
+        L.imageOverlay("data/map.png", bounds).addTo(map);
+        map.fitBounds(bounds);
+
+        var stores = {};  // Store ID to coordinates mapping
+        var corridorsGraph = {};  // Walkable paths
+        var markers = {};
+        var pathLayer = L.layerGroup().addTo(map);
+
+        function transformCoords(storeX, storeY) {
+            let shiftX = 30;  // Adjust to move left
+            let shiftY = 20;  // Adjust to move up
+
+            let scaledX = (storeX / 1000) * imageWidth - shiftX;
+            let scaledY = imageHeight - ((storeY / 1000) * imageHeight) + shiftY;
+            return [scaledY, scaledX];
+        }
+        function drawPath(path) {
+            pathLayer.clearLayers();  // Clear previous paths
+
+            if (path.length < 0) {
+                console.warn("Path too short to display.");
+                return;
+            }
+
+            let latlngs = path.map(store => stores[store]); // Convert store names to coordinates
+            L.polyline(latlngs, { color: 'blue', weight: 4 }).addTo(pathLayer);
+        }
+
+
+        function loadMallData() {
+            fetch("data/mall_map.json")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Loaded Data:", data); // Debugging
+
+                    if (!data.stores || !Array.isArray(data.stores)) {
+                        throw new Error("Invalid JSON: 'stores' is missing or not an array.");
+                    }
+
+                    if (!data.corridors || !Array.isArray(data.corridors)) {
+                        throw new Error("Invalid JSON: 'corridors' is missing or not an array.");
+                    }
+
+                    var sourceSelect = document.getElementById("source");
+                    var destinationSelect = document.getElementById("destination");
+
+                    data.stores.forEach(store => {
+                        let cleanId = store.id.trim();  // Normalize store ID
+                        let [newY, newX] = transformCoords(store.x, store.y);
+                        stores[cleanId] = [newY, newX];
+
+                        markers[cleanId] = L.marker([newY, newX]).addTo(map)
+                            .bindPopup(`<b>${cleanId}</b>`);
+
+                        sourceSelect.add(new Option(cleanId, cleanId));
+                        destinationSelect.add(new Option(cleanId, cleanId));
+                    });
+
+                    corridorsGraph = convertCorridorsToGraph(data.corridors);
+                    console.log("Corridor Graph:", corridorsGraph); // Debugging
+                })
+                .catch(error => {
+                    console.error("Error loading JSON:", error);
+                });
+        }
+
+
+        function convertCorridorsToGraph(corridors) {
+            let graph = {};
+
+            corridors.forEach(({ from, to }) => {
+                let cleanFrom = from.trim();
+                let cleanTo = to.trim();
+
+                if (!stores[cleanFrom] || !stores[cleanTo]) {
+                    console.warn(`Skipping invalid corridor: ${cleanFrom} → ${cleanTo}`);
+                    return;
+                }
+
+                if (!graph[cleanFrom]) graph[cleanFrom] = [];
+                if (!graph[cleanTo]) graph[cleanTo] = [];
+
+                graph[cleanFrom].push(cleanTo);
+                graph[cleanTo].push(cleanFrom);
+            });
+
+            console.log("Processed Corridor Graph:", graph);
+            return graph;
+        }
+
+
+
+
+
+
+        function findShortestPath() {
+            var source = document.getElementById("source").value;
+            var destination = document.getElementById("destination").value;
+
+            if (!source || !destination || source === destination) {
+                alert("Please select valid source and destination.");
+                return;
+            }
+
+            // Ensure corridorsGraph is loaded
+            if (Object.keys(corridorsGraph).length === 0) {
+                alert("Corridor data not loaded yet. Please wait and try again.");
+                return;
+            }
+
+            console.log("Source:", source);
+            console.log("Destination:", destination);
+            console.log("Corridor Graph:", corridorsGraph);
+            console.log("Running Dijkstra...");
+
+            let shortestPath = dijkstra(source, destination);
+            console.log("Found Path:", shortestPath);
+
+            if (!shortestPath || shortestPath.length === 0) {
+                alert("No valid path found!");
+                return;
+            }
+
+            drawPath(shortestPath);
+        }
+
+
+
+        function dijkstra(start, end) {
+            if (!corridorsGraph[start] || !corridorsGraph[end]) {
+                console.error(`Invalid source/destination: ${start} → ${end}`);
+                return [];
+            }
+
+            let distances = {}, prev = {}, pq = new Set(Object.keys(corridorsGraph));
+
+            for (let node in corridorsGraph) {
+                distances[node] = Infinity;
+                prev[node] = null;
+            }
+            distances[start] = 0;
+
+            while (pq.size) {
+                let closest = Array.from(pq).reduce((a, b) => distances[a] < distances[b] ? a : b);
+                pq.delete(closest);
+
+                console.log(`Checking node: ${closest}, Distance: ${distances[closest]}`);
+
+                if (closest === end) break;
+
+                for (let neighbor of corridorsGraph[closest]) {
+                    let alt = distances[closest] + getDistance(closest, neighbor);
+                    if (alt < distances[neighbor]) {
+                        distances[neighbor] = alt;
+                        prev[neighbor] = closest;
+                        console.log(`Updated distance for ${neighbor}: ${alt}`);
+                    }
+                }
+            }
+
+            let path = [];
+            for (let at = end; at !== null; at = prev[at]) {
+                path.push(at);
+            }
+
+            console.log("Final Computed Path:", path.reverse());
+            return path.reverse();
+        }
+
+
+
+
+        function getDistance(node1, node2) {
+            if (!stores[node1]) {
+                console.error(`Store not found: ${node1}`);
+                return Infinity;  // Return a large distance if store is missing
+            }
+            if (!stores[node2]) {
+                console.error(`Store not found: ${node2}`);
+                return Infinity;
+            }
+
+            let [y1, x1] = stores[node1];
+            let [y2, x2] = stores[node2];
+
+            return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)); // Euclidean distance
+        }
+
+
+        loadMallData();
+    </script>
+
+</body>
+
+</html>

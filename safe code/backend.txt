@@ -1,0 +1,21 @@
+backend:
+
+📂 chatbot-backend/
+│── 📂 venv/               # Virtual environment (ignored in .gitignore)
+│── 📂 app/                # Main application folder
+│   │── 📜 main.py         # FastAPI server with chatbot API
+│   │── 📜 nlp_model.py    # NLP model for intent recognition
+│   │── 📜 responses.py    # Predefined chatbot responses
+│   │── 📜 config.py       # Configuration settings (optional)
+│   │── 📂 data/           # Training data for NLP model (if needed)
+	|── stores.json
+│   │── 📂 logs/           # Log files (for debugging)
+│── 📂 tests/              # Unit tests for API & NLP model
+│── 📜 requirements.txt    # Python dependencies (FastAPI, spaCy, transformers, etc.)
+│── 📜 README.md           # Documentation & setup instructions
+│── 📜 .gitignore          # Ignore venv, logs, and unnecessary files
+___________________________________________________________________________________
+___________________________________________________________________________________
+
+
+venv:    uvicorn app.main:app --reload

@@ -1,0 +1,158 @@
+chatbot:
+Got it! You want a chatbot that:
+
+Engages in formal conversation (like a helpful assistant).
+
+Accepts the source and destination from the user.
+
+Displays the shortest path on the map once the user provides the locations.
+
+Steps to Implement:
+Frontend Chatbot UI – A simple chat interface where users can type messages.
+
+Backend Logic – Process user input, detect when they mention a source and destination, and trigger the findShortestPath function.
+
+Integration with Map – Once the chatbot receives valid locations, it updates the map accordingly.
+
+Tech Stack:
+Frontend: React (UI for the chatbot).
+
+Backend (Logic Handling): Simple JavaScript-based chatbot logic in the frontend.
+
+State Management: Use useState to store chat messages and extracted source/destination.
+
+I’ll Start by Adding the Chatbot UI & Logic
+Let me set up a basic chatbot component and integrate it with your map logic. Stay tuned! 🚀
+
+Chatbot Navigation
+
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+import React, { useState } from "react";
+import "./Chatbot.css"; // Ensure you style it properly
+
+const Chatbot = ({ onFindPath }) => {
+    const [messages, setMessages] = useState([]);
+    const [input, setInput] = useState("");
+    const [source, setSource] = useState(null);
+    const [destination, setDestination] = useState(null);
+
+    const handleSend = () => {
+        if (!input.trim()) return;
+        const userMessage = input.trim();
+        setMessages([...messages, { text: userMessage, sender: "user" }]);
+        setInput("");
+
+        // Extract source & destination
+        const words = userMessage.split(" ");
+        if (words.includes("from") && words.includes("to")) {
+            const fromIndex = words.indexOf("from");
+            const toIndex = words.indexOf("to");
+            if (fromIndex !== -1 && toIndex !== -1 && toIndex > fromIndex + 1) {
+                const src = words[fromIndex + 1];
+                const dest = words[toIndex + 1];
+                setSource(src);
+                setDestination(dest);
+                onFindPath(src, dest); // Trigger the map update
+                
+                setMessages(prev => [...prev, { text: `Finding path from ${src} to ${dest}...`, sender: "bot" }]);
+                return;
+            }
+        }
+
+        setMessages([...messages, { text: "I'm here to help! Please specify your source and destination like: 'from StoreA to StoreB'", sender: "bot" }]);
+    };
+
+    return (
+        <div className="chatbot-container">
+            <div className="chat-messages">
+                {messages.map((msg, index) => (
+                    <div key={index} className={`message ${msg.sender}`}>{msg.text}</div>
+                ))}
+            </div>
+            <div className="chat-input">
+                <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Ask me anything..."
+                />
+                <button onClick={handleSend}>Send</button>
+            </div>
+        </div>
+    );
+};
+
+export default Chatbot;
+
+Next Steps
+Integrate this chatbot with your MapComponent
+
+Pass onFindPath from MapComponent to the chatbot.
+
+When the chatbot receives source and destination, call findShortestPath and update the map.
+
+Style the Chatbot (Chatbot.css)
+
+Floating box on the bottom right.
+
+Message bubbles (one for user, one for bot).
+
+Once you've integrated this into your project, let me know if you need adjustments! 🚀

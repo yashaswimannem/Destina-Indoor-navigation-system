@@ -1,0 +1,59 @@
+.chatbot-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  z-index: 1;
+}
+
+.chat-log {
+  height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 8px;
+  min-width: 0; /* Ensures proper resizing */
+}
+
+canvas.map-canvas {
+  margin-top: 20px;
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+/* 🌐 Mobile Specific Styles */
+@media (max-width: 768px) {
+  .chatbot-container {
+    padding: 10px;
+  }
+
+  .chat-log {
+    height: 150px; /* Slightly smaller height for compact mobile display */
+    font-size: 14px;
+  }
+
+  .chat-input {
+    flex-direction: column; /* Stack input and button vertically on small screens */
+  }
+
+  .chat-input input {
+    width: 100%; /* Full width input on mobile */
+  }
+
+  canvas.map-canvas {
+    height: auto; /* Let the height adjust naturally */
+    width: 100%;
+  }
+}

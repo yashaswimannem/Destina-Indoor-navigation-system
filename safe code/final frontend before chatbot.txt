@@ -1,0 +1,761 @@
+final frontend before chatbot
+______________________________________________________________-
+
+Mapcomponent.css
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+    background-color: #000;
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Neon glow effect */
+@keyframes neonGlow {
+    0% { box-shadow: 0 0 5px #0ff, 0 0 10px #00f; }
+    50% { box-shadow: 0 0 15px #0ff, 0 0 25px #00f; }
+    100% { box-shadow: 0 0 5px #0ff, 0 0 10px #00f; }
+}
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Full Page Scrollable Container */
+.map-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 95vh;
+    text-align: center;
+    padding-top: 20px;
+    overflow: auto;
+    width: 100%;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Increase Map Display Size */
+.map-display {
+    width: 1039px;
+    height: 1080px;
+    border: 2px solid #0ff;
+    box-shadow: 0 0 15px #0ff;
+    margin-top: 20px;
+    overflow: auto;
+    animation: fadeIn 1.2s ease-in-out, neonGlow 3s infinite alternate ease-in-out;
+}
+
+/* Navbar Handling */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #111;
+    z-index: 1000;
+}
+
+/* Controls - Slide in effect */
+.controls {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+    z-index: 1;
+    position: relative;
+    animation: fadeIn 1.2s ease-in-out;
+}
+
+/* Dropdown & Button Styling */
+select, button {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+}
+
+select {
+    background-color: #111;
+    color: #0ff;
+    border: 2px solid #0ff;
+}
+
+/* Neon Button Animation */
+.neon-button {
+    background: transparent;
+    color: #0ff;
+    border: 2px solid #0ff;
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.neon-button:hover {
+    background: #0ff;
+    color: #000;
+    box-shadow: 0 0 10px #0ff, 0 0 20px #00f;
+}
+
+/* Add subtle glow when clicked */
+.neon-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 25px #0ff;
+}
+
+/* Custom Scrollbar */
+.map-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.map-container::-webkit-scrollbar-thumb {
+    background: #0ff;
+    border-radius: 4px;
+}
+
+.map-container::-webkit-scrollbar-track {
+    background: #222;
+}
+
+
+________________________________________________________________________________
+________________________________________________________________________________
+
+Mapcomponent.js
+
+import React, { useState, useRef, useEffect } from "react";
+import { MapContainer, ImageOverlay, Marker, Popup, Polyline, Tooltip } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import mallData from "../data/stores.json"; 
+import { findShortestPath } from "./ShortestPath"; 
+import L from "leaflet";
+import mapImage from "../assets/map1.png"; 
+import markerIconImg from "../assets/pinn.png"; 
+import "./MapComponent.css";
+
+const MapComponent = () => {
+    const [source, setSource] = useState("");
+    const [destination, setDestination] = useState("");
+    const [animatedPath, setAnimatedPath] = useState([]);
+    const [animationIndex, setAnimationIndex] = useState(0);
+    const animationInterval = useRef(null);
+
+    const customIcon = new L.Icon({
+        iconUrl: markerIconImg, 
+        iconSize: [25, 25],
+        iconAnchor: [12, 25], 
+        popupAnchor: [0, -25],
+    });
+
+    const adjustY = (y) => 1080 - y; 
+
+    // Function to smoothly animate the path with moving dots
+    useEffect(() => {
+        if (animatedPath.length === 0) return;
+        
+        setAnimationIndex(0); // Reset animation index
+        clearInterval(animationInterval.current);
+
+        animationInterval.current = setInterval(() => {
+            setAnimationIndex((prev) => {
+                if (prev < animatedPath.length - 1) return prev + 1;
+                clearInterval(animationInterval.current);
+                return prev;
+            });
+        }, 200); // Speed of movement
+
+        return () => clearInterval(animationInterval.current);
+    }, [animatedPath]);
+
+    const handleFindPath = () => {
+        if (!source || !destination) {
+            alert("Please select both source and destination.");
+            return;
+        }
+        const path = findShortestPath(source, destination);
+        if (path.length > 0) {
+            if (path[0] !== source) {
+                path.unshift(source);
+            }
+            setAnimatedPath(path);
+        }
+    };
+
+    const filteredStores = mallData.stores.filter(store => 
+        !store.id.toLowerCase().startsWith("lc") && !store.id.toLowerCase().startsWith("mc")
+    );
+
+    return (
+        <div className="map-container">
+            <div className="controls">
+                <label>Source: </label>
+                <select value={source} onChange={(e) => setSource(e.target.value)}>
+                    <option value="">Select Source</option>
+                    {filteredStores.map(store => (
+                        <option key={store.id} value={store.id}>{store.id}</option>
+                    ))}
+                </select>
+
+                <label>Destination: </label>
+                <select value={destination} onChange={(e) => setDestination(e.target.value)}>
+                    <option value="">Select Destination</option>
+                    {filteredStores.map(store => (
+                        <option key={store.id} value={store.id}>{store.id}</option>
+                    ))}
+                </select>
+
+                <button className="neon-button" onClick={handleFindPath}>
+                    Find Path
+                </button>
+            </div>
+
+            <div className="map-display">
+                <MapContainer
+                    center={[500, 520]}
+                    zoom={1}
+                    style={{ height: "1080px", width: "1039px" }}
+                    crs={L.CRS.Simple}
+                >
+                    <ImageOverlay url={mapImage} bounds={[[0, 0], [1080, 1039]]} />
+
+                    {filteredStores.map((store) => (
+                        <Marker key={store.id} position={[adjustY(store.y), store.x]} icon={customIcon}>
+                            <Popup>{store.id}</Popup>
+                        </Marker>
+                    ))}
+
+                    {source && (
+                        <Marker
+                            position={[
+                                adjustY(mallData.stores.find(s => s.id === source)?.y),
+                                mallData.stores.find(s => s.id === source)?.x
+                            ]}
+                            icon={customIcon}
+                        >
+                            <Popup>Source: {source}</Popup>
+                            <Tooltip permanent direction="top">
+                                {source}
+                            </Tooltip>
+                        </Marker>
+                    )}
+
+                    {destination && (
+                        <Marker
+                            position={[
+                                adjustY(mallData.stores.find(s => s.id === destination)?.y),
+                                mallData.stores.find(s => s.id === destination)?.x
+                            ]}
+                            icon={customIcon}
+                        >
+                            <Popup>Destination: {destination}</Popup>
+                            <Tooltip permanent direction="top">
+                                {destination}
+                            </Tooltip>
+                        </Marker>
+                    )}
+
+                    {/* Moving Animated Dots (Smooth Path Animation) */}
+                    {animatedPath.length > 1 && (
+                        <Polyline
+                            positions={animatedPath.slice(0, animationIndex + 1).map(node => {
+                                const store = mallData.stores.find(s => s.id === node);
+                                return store ? [adjustY(store.y), store.x] : null;
+                            }).filter(Boolean)}
+                            color="red"
+                            weight={5}
+                            opacity={0.8}
+                            dashArray="10, 15" // Dashed line effect
+                        />
+                    )}
+                </MapContainer>
+            </div>
+        </div>
+    );
+};
+
+export default MapComponent;
+
+___________________________________________________________________________________
+___________________________________________________________________________________
+
+Navbar.css
+
+
+/* Navbar Styles */
+.navbar {
+  position: fixed; /* Keeps the navbar fixed at the top */
+  top: 0;
+  left: 0;
+  width: 95%;
+  background-color: black; /* Semi-transparent black */
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
+  z-index: 1000; /* Ensures it stays above other elements */
+}
+  
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-right: 20px; /* Adjust this to reduce the gap */
+}
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 40px;
+  }
+  
+  .nav-links li {
+    display: inline-block;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    transition: 0.3s ease-in-out;
+    position: relative;
+  }
+  
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 2px;
+    background-color: cyan;
+    transform: scaleX(0);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .nav-links a:hover::after {
+    transform: scaleX(1);
+  }
+  
+  .nav-links a:hover {
+    color: cyan;
+  }
+  
+___________________________________________________________________________________________
+___________________________________________________________________________________________
+
+NAvbar.js
+
+import React from "react";
+import "./Navbar.css";
+
+function Navbar() {
+  return (
+    <nav className="navbar">
+      <div className="logo">DESTINA</div>
+      <ul className="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  );
+}
+
+export default Navbar;
+
+____________________________________________________________________________
+____________________________________________________________________________
+
+Searchbar.js
+
+import React, { useState } from "react";
+
+const SearchBar = ({ onFindPath }) => {
+  const [source, setSource] = useState("");
+  const [destination, setDestination] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (source && destination) {
+      onFindPath(source, destination);
+    } else {
+      alert("Please enter both source and destination");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
+      
+    </form>
+  );
+};
+
+export default SearchBar;
+
+________________________________________________________________________________________
+________________________________________________________________________________________
+
+Shortestpath.js
+
+import mallData from "../data/stores.json";
+
+// 🛠 Function to Build the Navigation Graph
+const buildGraph = () => {
+    let graph = {};
+
+    // ✅ Step 1: Add Store-to-Corridor Connections from `corridors`
+    mallData.corridors.forEach(({ from, to }) => {
+        if (!graph[from]) graph[from] = {};
+        if (!graph[to]) graph[to] = {};
+
+        const fromNode = mallData.stores.find(store => store.id === from);
+        const toNode = mallData.stores.find(store => store.id === to);
+
+        if (fromNode && toNode) {
+            const distance = Math.sqrt(
+                Math.pow(toNode.x - fromNode.x, 2) + Math.pow(toNode.y - fromNode.y, 2)
+            );
+            graph[from][to] = distance;
+            graph[to][from] = distance;
+        }
+    });
+
+    // ✅ Step 2: Add Corridor-to-Corridor Connections from `Walkable_paths`
+    mallData.Walkable_paths.forEach(({ from, to }) => {
+        if (!graph[from]) graph[from] = {};
+        if (!graph[to]) graph[to] = {};
+
+        const fromNode = mallData.stores.find(store => store.id === from);
+        const toNode = mallData.stores.find(store => store.id === to);
+
+        if (fromNode && toNode) {
+            const distance = Math.sqrt(
+                Math.pow(toNode.x - fromNode.x, 2) + Math.pow(toNode.y - fromNode.y, 2)
+            );
+            graph[from][to] = distance;
+            graph[to][from] = distance;
+        }
+    });
+
+    console.log("📌 Updated Graph:", graph);
+    return graph;
+};
+
+// 🛠 Dijkstra’s Algorithm to Find Shortest Path
+const dijkstra = (graph, startNode, endNode) => {
+    let distances = {};
+    let prev = {};
+    let pq = new Set(Object.keys(graph));
+
+    Object.keys(graph).forEach(node => {
+        distances[node] = Infinity;
+    });
+    distances[startNode] = 0;
+
+    while (pq.size) {
+        let minNode = [...pq].reduce((min, node) => (distances[node] < distances[min] ? node : min), [...pq][0]);
+
+        if (minNode === endNode) break;
+        pq.delete(minNode);
+
+        for (let neighbor in graph[minNode]) {
+            let newDist = distances[minNode] + graph[minNode][neighbor];
+            if (newDist < distances[neighbor]) {
+                distances[neighbor] = newDist;
+                prev[neighbor] = minNode;
+            }
+        }
+    }
+
+    let path = [];
+    let step = endNode;
+    while (prev[step]) {
+        path.unshift(step);
+        step = prev[step];
+    }
+    if (distances[endNode] !== Infinity) path.unshift(startNode);
+
+    console.log("✅ Shortest Path Found:", path);
+    return path;
+};
+
+// 🛠 Function to Find Shortest Path Between Two Stores
+export const findShortestPath = (start, end) => {
+    console.log(`🔍 Finding path from: ${start} to: ${end}`);
+    const graph = buildGraph();
+    return dijkstra(graph, start, end);
+};
+
+__________________________________________________________________________
+__________________________________________________________________________
+Store.js
+
+import { Text } from "@react-three/drei";
+
+export default function Store({ position, name, category }) {
+  return (
+    <group position={position}>
+      {/* Store Box */}
+      <mesh>
+        <boxGeometry args={[2, 2, 2]} />
+        <meshStandardMaterial
+          color={
+            category === "clothing" ? "lightblue" :
+            category === "food" ? "orange" :
+            "gold"
+          }
+        />
+      </mesh>
+
+      {/* Store Name Label */}
+      <Text position={[0, 1.5, 0]} fontSize={0.4} color="black">
+        {name}
+      </Text>
+    </group>
+  );
+}
+
+_______________________________________________________________________________
+_______________________________________________________________________________
+
+Storelist.js
+
+import React from "react";
+import mallData from "../data/stores.json";  // ✅ Load the JSON file
+
+const StoreList = () => {
+  return (
+    <div>
+      <h2>Store List</h2>
+      <ul>
+        {mallData.stores.map((store) => (
+          <li key={store.id}>{store.id}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default StoreList;  // ✅ Ensure the correct export
+
+_____________________________________________________________________________________
+_____________________________________________________________________________________
+
+Welcomepage.css
+
+/* WelcomePage.css */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+}
+
+/* Main Container */
+.welcome-container {
+    max-width: 600px;
+    padding: 20px;
+}
+
+/* Typing Effect with Blinking Cursor */
+.glow-text {
+    font-size: 3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 10px #fff, 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #00f, 0 0 50px #00f;
+    animation: glow 1.5s infinite alternate;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.blinking-cursor {
+    font-weight: bold;
+    font-size: 3rem;
+    color: #0ff;
+    animation: blink 0.7s steps(2, start) infinite;
+}
+
+/* Glow Animation */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #00f;
+    }
+    to {
+        text-shadow: 0 0 15px #fff, 0 0 25px #0ff, 0 0 35px #0ff, 0 0 45px #00f;
+    }
+}
+
+/* Cursor Blink */
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Fade-in Text */
+.fade-in-text {
+    font-size: 1.2rem;
+    opacity: 0;
+    animation: fadeIn 3s ease-in-out forwards 3s;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Futuristic Neon Button */
+.neon-button {
+    background: transparent;
+    color: #0ff;
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    border: 2px solid #0ff;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    outline: none;
+}
+
+/* Neon Button Hover Effect */
+.neon-button:hover {
+    color: #000;
+    background-color: #0ff;
+    box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #00f;
+}
+
+/* Button Click Effect */
+.neon-button:active {
+    transform: scale(0.95);
+}
+
+______________________________________________________________________________________
+______________________________________________________________________________________
+
+WElcome.js
+
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // For navigation
+import Navbar from "../components/Navbar";
+import "./WelcomePage.css";
+
+function WelcomePage() {
+  const navigate = useNavigate(); // Navigation hook
+  const text = "Welcome to DESTINA"; // Text for typing effect
+  const [visibleText, setVisibleText] = useState(""); // State for typed text
+  const [cursorVisible, setCursorVisible] = useState(true); // For blinking cursor
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setVisibleText(text.slice(0, index + 1));
+      index++;
+      if (index >= text.length) {
+        clearInterval(interval); // Stop the typing effect
+      }
+    }, 150);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setCursorVisible((prev) => !prev); // Make cursor blink
+    }, 500);
+    return () => clearInterval(cursorInterval);
+  }, []);
+
+  return (
+    <>
+      <Navbar />
+      <div className="welcome-container">
+        <h1 className="glow-text">
+          {visibleText}
+          <span className="blinking-cursor">{cursorVisible ? "|" : ""}</span>
+        </h1>
+        <p className="fade-in-text">
+          Seamless Navigation, Endless Exploration – Find Your Way, Effortlessly! 🏬✨
+        </p>
+        <button className="neon-button" onClick={() => navigate("/map")}>
+          START NAVIGATION
+        </button>
+      </div>
+    </>
+  );
+}
+
+export default WelcomePage;
+
+______________________________________________________________________________________________________________________________________________________________________________________
+
+App.js
+
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import WelcomePage from "./components/WelcomePage"; // Import Welcome Page
+import MapComponent from "./components/MapComponent"; // Import Map Component
+import SearchBar from "./components/SearchBar"; // Import Search Bar
+
+function MapWithSearch() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      {/* Search Bar on top */}
+      <SearchBar />
+      {/* Map Component taking up the remaining space */}
+      <div style={{ flexGrow: 1 }}>
+        <MapComponent />
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Route to the Welcome Page as the default */}
+        <Route path="/" element={<WelcomePage />} />
+        
+        {/* When clicking Start Navigation, it navigates to /map */}
+        <Route path="/map" element={<MapWithSearch />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+______________________________________________________________________________________________________________________________________________________________________________________

@@ -1,0 +1,165 @@
+agenda:
+1. Write an introduction
+2. DFD
+3.  Introduction, Literature Review, Design
+Mini project
+Presentation stuff
+Intro : project & domain, Literature review doc : read research paper & derive points from that leading to your ps, design : dfds (not implementation as of now)
+
+---------------------------------------------------------------------------
+Mapcomponent.js:
+import React from "react";
+import { MapContainer, ImageOverlay, Marker, Popup, Polyline } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import mallData from "../data/stores.json";  // ✅ Import JSON file
+import mapImage from "../assets/map.png";   // ✅ Import mall map
+import markerIconImg from "../assets/marker.png";  // ✅ Use custom marker image
+import L from "leaflet";
+
+// Define map boundaries (Set based on actual image size)
+const imageWidth = 1000; // Adjust this based on your actual map image width
+const imageHeight = 1000; // Adjust this based on your actual map image height
+const bounds = [
+  [0, 0], 
+  [imageHeight, imageWidth] // Ensures correct scaling
+];
+
+// Define Custom Marker Icon
+const customIcon = new L.Icon({
+  iconUrl: markerIconImg,
+  iconSize: [25, 25],  // Adjust size if needed
+  iconAnchor: [12, 25], // Centers the icon correctly
+});
+
+const MapComponent = () => {
+  return (
+    <MapContainer 
+      center={[imageHeight / 2, imageWidth / 2]}  // Centering the map
+      zoom={1} 
+      maxBounds={bounds} 
+      style={{ height: "600px", width: "100%" }} 
+      crs={L.CRS.Simple}  // Keeps coordinates 1:1 with image
+    >
+      {/* Overlay the Mall Map Image */}
+      <ImageOverlay url={mapImage} bounds={bounds} />
+
+      {/* Plot Store Markers with Corrected Y-Axis */}
+      {mallData.stores.map((store) => {
+        const correctedY = imageHeight - store.y; // ✅ Flip Y-axis
+        return (
+          <Marker key={store.id} position={[correctedY + 40, store.x - 20]} icon={customIcon}>  
+            <Popup>
+              <strong>{store.id}</strong> <br /> Coordinates: ({store.x}, {store.y}) → Fixed ({store.x}, {correctedY})
+            </Popup>
+          </Marker>
+        );
+      })}
+
+      {/* 🔵 Corrected Blue Path Lines (Corridors) */}
+      {mallData.corridors.map((corridor, index) => {
+        const fromStore = mallData.stores.find((s) => s.id === corridor.from);
+        const toStore = mallData.stores.find((s) => s.id === corridor.to);
+        
+        if (fromStore && toStore) {
+          // ✅ Apply the same Y-flipping correction to paths
+          const fromY = imageHeight - fromStore.y;  
+          const toY = imageHeight - toStore.y;
+          
+          return (
+            <Polyline 
+              key={index} 
+              positions={[[fromY + 40, fromStore.x - 20], [toY + 40, toStore.x - 20]]} 
+              color="blue" 
+              weight={3} // Adjust thickness if needed
+            />
+            
+          );
+        }
+        return null;
+      })}
+    </MapContainer>
+  );
+};
+
+export default MapComponent;
+-------------------------------------------------------------------------------
+1. SfM- structure from motion
+2. Image based Localization
+3. Dead-Reckoning Calibration
+---------------------------------------------------------------------------
+import React, { useState, useEffect } from "react";
+import { MapContainer, ImageOverlay, Marker, Popup, Polyline } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import mallData from "../data/stores.json";
+import mapImage from "../assets/image.png";
+import markerIconImg from "../assets/marker.png";
+import { findShortestPath } from "./ShortestPath";
+import L from "leaflet";
+
+const imageWidth = 1000;
+const imageHeight = 1000;
+const bounds = [[0, 0], [imageHeight, imageWidth]];
+
+// Define Custom Marker Icon
+const customIcon = new L.Icon({
+  iconUrl: markerIconImg,
+  iconSize: [25, 25],
+  iconAnchor: [12, 25],
+});
+
+const MapComponent = ({ source, destination }) => {
+  const [shortestRoute, setShortestRoute] = useState([]);
+
+  useEffect(() => {
+    if (source && destination) {
+      console.log("🔍 Finding path from:", source, "to:", destination);
+
+      const path = findShortestPath(mallData.stores, mallData.corridors, source, destination);
+      setShortestRoute(path);
+
+      if (path.length > 0) {
+        console.log("✅ Shortest Path Found:", path);
+      } else {
+        console.log("❌ No Valid Path Found!");
+      }
+    }
+  }, [source, destination]);
+
+  return (
+    <MapContainer center={[imageHeight / 2, imageWidth / 2]} zoom={1} maxBounds={bounds} style={{ height: "600px", width: "100%" }} crs={L.CRS.Simple}>
+      <ImageOverlay url={mapImage} bounds={bounds} />
+
+      {mallData.stores.map((store, index) => {
+        const correctedY = imageHeight - store.y;
+        return (
+          <Marker key={`${store.id}-${index}`} position={[correctedY, store.x-20]} icon={customIcon}>
+            <Popup>{store.id}</Popup>
+          </Marker>
+        );
+      })}
+
+      {/* 🔵 Default Blue Paths (Corridors) */}
+      {mallData.corridors.map((corridor, index) => {
+        const fromStore = mallData.stores.find((s) => s.id === corridor.from);
+        const toStore = mallData.stores.find((s) => s.id === corridor.to);
+        if (fromStore && toStore) {
+          const fromY = imageHeight - fromStore.y;
+          const toY = imageHeight - toStore.y;
+          return <Polyline key={index} positions={[[fromY, fromStore.x-20], [toY, toStore.x-20]]} color="blue" />;
+        }
+        return null;
+      })}
+
+      {/* 🔴 Shortest Path in Red */}
+      {shortestRoute.length > 1 && (
+        <Polyline positions={shortestRoute.map(id => {
+          const store = mallData.stores.find(s => s.id.toLowerCase() === id);
+          return store ? [imageHeight - store.y, store.x] : null;
+        }).filter(Boolean)} color="red" weight={5} />
+      )}
+    </MapContainer>
+  );
+};
+
+export default MapComponent;
+--------------------------------------------------------------------------------

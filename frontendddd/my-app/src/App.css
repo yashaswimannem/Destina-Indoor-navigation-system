@@ -1,0 +1,69 @@
+/* General Styles */
+.App {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.App-logo {
+  height: 30vmin; /* Resize logo for mobile */
+  pointer-events: none;
+}
+
+df-messenger {
+  --df-messenger-button-titlebar-color: #5e35b1;
+  --df-messenger-chat-background-color: #ffffff;
+  --df-messenger-font-color: #000000;
+  --df-messenger-send-icon: #ffffff;
+  --df-messenger-button-titlebar-font-color: #ffffff;
+}
+
+/* Mobile Specific Styles */
+@media (max-width: 768px) {
+  /* Logo Size Adjustment for Mobile */
+  .App-logo {
+    height: 40vmin;  /* Resize logo to be larger on mobile */
+  }
+
+  /* Header Section */
+  .App-header {
+    font-size: 18px; /* Adjust font size for smaller screens */
+    padding: 15px;  /* Add padding for better spacing */
+    text-align: center; /* Center-align the content */
+  }
+
+  /* Link Styling */
+  .App-link {
+    font-size: 14px; /* Adjust font size for better readability on mobile */
+    color: #61dafb;
+    text-decoration: none;  /* Remove underline */
+    margin-top: 10px;  /* Add spacing between elements */
+  }
+
+  /* General padding adjustments for mobile screens */
+  .App {
+    padding: 10px;  /* Add some padding around the edges */
+  }
+
+  /* Adjust the background color for better contrast */
+  .App-header {
+    background-color: #282c34;
+  }
+}
+
+/* For Prefers-Reduced-Motion (animation for logo spin) */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* Keyframe for Logo Spin Animation */
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

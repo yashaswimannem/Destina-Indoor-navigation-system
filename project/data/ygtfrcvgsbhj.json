@@ -1,0 +1,962 @@
+{
+    "stores": [
+        {
+            "id": "Apollo",
+            "name": "l1",
+            "x": 479,
+            "y": 965
+        },
+        {
+            "id": "souled store",
+            "name": "l2",
+            "x": 442,
+            "y": 962
+        },
+        {
+            "id": "Apple Restaurants Food court ",
+            "name": "l3",
+            "x": 260,
+            "y": 966
+        },
+        {
+            "id": "Yousta",
+            "name": "l4",
+            "x": 251,
+            "y": 701
+        },
+        {
+            "id": "GKB opticals",
+            "name": "l5",
+            "x": 313,
+            "y": 642
+        },
+        {
+            "id": "Fastrack",
+            "name": "l6",
+            "x": 267,
+            "y": 643
+        },
+        {
+            "id": "opium",
+            "name": "l7",
+            "x": 236,
+            "y": 641
+        },
+        {
+            "id": "Highlander",
+            "name": "l8",
+            "x": 127,
+            "y": 448
+        },
+        {
+            "id": "Beauty and Nutrie",
+            "name": "l9",
+            "x": 193,
+            "y": 447
+        },
+        {
+            "id": "spar",
+            "name": "l10",
+            "x": 282,
+            "y": 280
+        },
+        {
+            "id": "snitch",
+            "name": "l11",
+            "x": 512,
+            "y": 294
+        },
+        {
+            "id": "New Me",
+            "name": "l12",
+            "x": 563,
+            "y": 292
+        },
+        {
+            "id": "BewaKoof",
+            "name": "l13",
+            "x": 611,
+            "y": 292
+        },
+        {
+            "id": "The indian Garrage Co",
+            "name": "l14",
+            "x": 665,
+            "y": 292
+        },
+        {
+            "id": "Lattliv",
+            "name": "l15",
+            "x": 780,
+            "y": 401
+        },
+        {
+            "id": "campus",
+            "name": "l16",
+            "x": 781,
+            "y": 432
+        },
+        {
+            "id": "Mr.Pronto",
+            "name": "l17",
+            "x": 836,
+            "y": 425
+        },
+        {
+            "id": "King carpets",
+            "name": "l18",
+            "x": 836,
+            "y": 427
+        },
+        {
+            "id": "sk-one",
+            "name": "l19",
+            "x": 811,
+            "y": 547
+        },
+        {
+            "id": "performex",
+            "name": "l20",
+            "x": 808,
+            "y": 609
+        },
+        {
+            "id": "skechers",
+            "name": "l21",
+            "x": 810,
+            "y": 633
+        },
+        {
+            "id": "stride",
+            "name": "l22",
+            "x": 811,
+            "y": 669
+        },
+        {
+            "id": "nike",
+            "name": "l23",
+            "x": 809,
+            "y": 705
+        },
+        {
+            "id": "Reliance Trends",
+            "name": "l24",
+            "x": 809,
+            "y": 787
+        },
+        {
+            "id": "Adidas",
+            "name": "l25",
+            "x": 809,
+            "y": 913
+        },
+        {
+            "id": "Puma",
+            "name": "l26",
+            "x": 645,
+            "y": 963
+        },
+        {
+            "id": "Lenskart",
+            "name": "l27",
+            "x": 541,
+            "y": 771
+        },
+        {
+            "id": "GKB opticals",
+            "name": "l28",
+            "x": 509,
+            "y": 770
+        },
+        {
+            "id": "VISION express",
+            "name": "l29",
+            "x": 468,
+            "y": 768
+        },
+        {
+            "id": "Specta",
+            "name": "l30",
+            "x": 437,
+            "y": 771
+        },
+        {
+            "id": "Saberi's",
+            "name": "l31",
+            "x": 438,
+            "y": 727
+        },
+        {
+            "id": "Titan eye plus",
+            "name": "l32",
+            "x": 439,
+            "y": 699
+        },
+        {
+            "id": "Trends Footware",
+            "name": "l33",
+            "x": 438,
+            "y": 669
+        },
+        {
+            "id": "Show store",
+            "name": "l34",
+            "x": 438,
+            "y": 642
+        },
+        {
+            "id": "Metro",
+            "name": "l35",
+            "x": 437,
+            "y": 612
+        },
+        {
+            "id": "New-u",
+            "name": "l36",
+            "x": 436,
+            "y": 572
+        },
+        {
+            "id": "Unlimited",
+            "name": "l37",
+            "x": 438,
+            "y": 528
+        },
+        {
+            "id": "Miniso",
+            "name": "l38",
+            "x": 438,
+            "y": 460
+        },
+        {
+            "id": "Maniyar",
+            "name": "l39",
+            "x": 440,
+            "y": 423
+        },
+        {
+            "id": "Occult",
+            "name": "l40",
+            "x": 436,
+            "y": 404
+        },
+        {
+            "id": "Haldiram's Sweets",
+            "name": "l41",
+            "x": 444,
+            "y": 378
+        },
+        {
+            "id": "Minilove",
+            "name": "l42",
+            "x": 475,
+            "y": 381
+        },
+        {
+            "id": "Balaji Hosiery",
+            "name": "l43",
+            "x": 497,
+            "y": 381
+        },
+        {
+            "id": "van hausen inner wear(man)",
+            "name": "l44",
+            "x": 517,
+            "y": 382
+        },
+        {
+            "id": "u s polo assn (inner wear)",
+            "name": "l45",
+            "x": 543,
+            "y": 383
+        },
+        {
+            "id": "Amante",
+            "name": "l46",
+            "x": 566,
+            "y": 379
+        },
+        {
+            "id": "Jockey Men(inner wear)",
+            "name": "l47",
+            "x": 590,
+            "y": 381
+        },
+        {
+            "id": "The Good goods",
+            "name": "l48",
+            "x": 628,
+            "y": 380
+        },
+        {
+            "id": "Rushers",
+            "name": "l49",
+            "x": 659,
+            "y": 382
+        },
+        {
+            "id": "5 Miles",
+            "name": "l50",
+            "x": 658,
+            "y": 401
+        },
+        {
+            "id": "Neeman's",
+            "name": "l51",
+            "x": 658,
+            "y": 427
+        },
+        {
+            "id": "Crossword",
+            "name": "l52",
+            "x": 659,
+            "y": 451
+        },
+        {
+            "id": "Blissclub",
+            "name": "l53",
+            "x": 658,
+            "y": 469
+        },
+        {
+            "id": "cricfuse",
+            "name": "l55",
+            "x": 661,
+            "y": 511
+        },
+        {
+            "id": "speedo",
+            "name": "l56",
+            "x": 658,
+            "y": 535
+        },
+        {
+            "id": "crocs",
+            "name": "l57",
+            "x": 658,
+            "y": 554
+        },
+        {
+            "id": "New Balance",
+            "name": "l58",
+            "x": 658,
+            "y": 593
+        },
+        {
+            "id": "reebok",
+            "name": "l59",
+            "x": 658,
+            "y": 643
+        },
+        {
+            "id": "columbia",
+            "name": "l60",
+            "x": 658,
+            "y": 671
+        },
+        {
+            "id": "asics",
+            "name": "l61",
+            "x": 658,
+            "y": 703
+        },
+        {
+            "id": "Woodlands",
+            "name": "l62",
+            "x": 661,
+            "y": 733
+        },
+        {
+            "id": "cafe ritazza",
+            "name": "l63",
+            "x": 662,
+            "y": 766
+        },
+        {
+            "id": "Daniel Wellington",
+            "name": "l64",
+            "x": 614,
+            "y": 772
+        },
+        {
+            "id": "casio",
+            "name": "l66",
+            "x": 591,
+            "y": 773
+        },
+        {
+            "id": "KWC",
+            "name": "l67",
+            "x": 568,
+            "y": 770
+        },
+        {
+            "id": "stairs1",
+            "name": "l68",
+            "x": 135,
+            "y": 327
+        },
+        {
+            "id": "stairs2",
+            "name": "l69",
+            "x": 130,
+            "y": 597
+        },
+        {
+            "id": "stairs3",
+            "name": "l70",
+            "x": 249,
+            "y": 533
+        },
+        {
+            "id": "Esclator1",
+            "name": "l71",
+            "x": 254,
+            "y": 513
+        },
+        {
+            "id": "Esclator2",
+            "name": "l72",
+            "x": 307,
+            "y": 593
+        },
+        {
+            "id": "Esclator2",
+            "name": "l72",
+            "x": 723,
+            "y": 706
+        },
+        {
+            "id": "LIFT1",
+            "name": "l73",
+            "x": 190,
+            "y": 571
+        },
+        {
+            "id": "LIFT2",
+            "name": "l74",
+            "x": 536,
+            "y": 836
+        },
+        {
+            "id": "LIFT3",
+            "name": "l75",
+            "x": 567,
+            "y": 835
+        },
+        {
+            "id": "LIFT4",
+            "name": "l76",
+            "x": 935,
+            "y": 445
+        },
+        {
+            "id": "Male WC1",
+            "name": "l77",
+            "x": 932,
+            "y": 402
+        },
+        {
+            "id": "Female WC1",
+            "name": "l78",
+            "x": 932,
+            "y": 420
+        },
+        {
+            "id": "Male WC2",
+            "name": "l79",
+            "x": 196,
+            "y": 636
+        },
+        {
+            "id": "Female WC2",
+            "name": "l67",
+            "x": 135,
+            "y": 636
+        },
+        {
+            "id": "mc1",
+            "name": "main corridor",
+            "x": 385,
+            "y": 357
+        },
+        {
+            "id": "mc2",
+            "name": "main corridor",
+            "x": 448,
+            "y": 341
+        },
+        {
+            "id": "mc3",
+            "name": "main corridor",
+            "x": 545,
+            "y": 339
+        },
+        {
+            "id": "mc4",
+            "name": "main corridor",
+            "x": 682,
+            "y": 348
+        },
+        {
+            "id": "mc5",
+            "name": "main corridor",
+            "x": 720,
+            "y": 437
+        },
+        {
+            "id": "mc6",
+            "name": "main corridor",
+            "x": 722,
+            "y": 506
+        },
+        {
+            "id": "mc7",
+            "name": "main corridor",
+            "x": 726,
+            "y": 560
+        },
+        {
+            "id": "mc8",
+            "name": "main corridor",
+            "x": 721,
+            "y": 621
+        },
+        {
+            "id": "mc9",
+            "name": "main corridor",
+            "x": 726,
+            "y": 560
+        },
+        {
+            "id": "mc10",
+            "name": "main corridor",
+            "x": 717,
+            "y": 756
+        },
+        {
+            "id": "mc11",
+            "name": "main corridor",
+            "x": 702,
+            "y": 823
+        },
+        {
+            "id": "mc12",
+            "name": "main corridor",
+            "x": 616,
+            "y": 820
+        },
+        {
+            "id": "mc13",
+            "name": "main corridor",
+            "x": 611,
+            "y": 850
+        },
+        {
+            "id": "mc14",
+            "name": "main corridor",
+            "x": 540,
+            "y": 884
+        },
+        {
+            "id": "mc15",
+            "name": "main corridor",
+            "x": 471,
+            "y": 846
+        },
+        {
+            "id": "mc16",
+            "name": "main corridor",
+            "x": 394,
+            "y": 774
+        },
+        {
+            "id": "mc17",
+            "name": "main corridor",
+            "x": 384,
+            "y": 637
+        },
+        {
+            "id": "mc18",
+            "name": "main corridor",
+            "x": 377,
+            "y": 564
+        },
+        {
+            "id": "mc19",
+            "name": "main corridor",
+            "x": 375,
+            "y": 493
+        },
+        {
+            "id": "mc20",
+            "name": "main corridor",
+            "x": 400,
+            "y": 421
+        },
+        {
+            "id": "lc21",
+            "name": "left corridor",
+            "x": 286,
+            "y": 501
+        },
+        {
+            "id": "lc22",
+            "name": "left corridor",
+            "x": 190,
+            "y": 500
+        },
+        {
+            "id": "lc23",
+            "name": "left corridor",
+            "x": 139,
+            "y": 524
+        },
+        {
+            "id": "lc24",
+            "name": "left corridor",
+            "x": 158,
+            "y": 646
+        },
+        {
+            "id": "lc25",
+            "name": "left corridor",
+            "x": 191,
+            "y": 601
+        },
+        {
+            "id": "lc26",
+            "name": "left corridor",
+            "x": 252,
+            "y": 578
+        },
+        {
+            "id": "rc27",
+            "name": "right corridor",
+            "x": 759,
+            "y": 474
+        },
+        {
+            "id": "rc28",
+            "name": "right corridor",
+            "x": 834,
+            "y": 473
+        },
+        {
+            "id": "rc29",
+            "name": "right corridor",
+            "x": 887,
+            "y": 470
+        },
+        {
+            "id": "rc30",
+            "name": "right corridor",
+            "x": 903,
+            "y": 419
+        },
+        {
+            "id": "rc31",
+            "name": "right corridor",
+            "x": 930,
+            "y": 475
+        },
+        {
+            "id": "rc32",
+            "name": "right corridor",
+            "x": 972,
+            "y": 474
+        },
+        {
+            "id": "rc33",
+            "name": "right corridor",
+            "x": 972,
+            "y": 421
+        },
+        {
+            "id": "d34",
+            "name": "down corridor",
+            "x": 548,
+            "y": 957
+        },
+        {
+            "id": "d35",
+            "name": "down corridor",
+            "x": 709,
+            "y": 897
+        },
+        {
+            "id": "d36",
+            "name": "down corridor",
+            "x": 948,
+            "y": 948
+        },
+        {
+            "id": "d37",
+            "name": "down corridor",
+            "x": 711,
+            "y": 996
+        }
+    ],
+    "corridors": [
+        {
+            "from": "Apollo",
+            "to": "d34"
+        },
+        {
+            "from": "souled store",
+            "to": "mc15"
+        },
+        {
+            "from": "Apple Restaurants Food Court ",
+            "to": "mc15"
+        },
+        {
+            "from": "Yousta",
+            "to": "mc16"
+        },
+        {
+            "from": "GKB opticals",
+            "to": "mc17"
+        },
+        {
+            "from": "Fastrack",
+            "to": "lc26"
+        },
+        {
+            "from": "opium",
+            "to": "lc26"
+        },
+        {
+            "from": "Highlander",
+            "to": "lc23"
+        },
+        {
+            "from": "Beauty and Nutrie ",
+            "to": "lc22"
+        },
+        {
+            "from": "spar",
+            "to": "mc1"
+        },
+        {
+            "from": "snitch",
+            "to": "mc3"
+        },
+        {
+            "from": "New Me",
+            "to": "mc3"
+        },
+        {
+            "from": "BewaKoof",
+            "to": "mc3"
+        },
+        {
+            "from": "The indian Garrage co",
+            "to": "mc4"
+        },
+        {
+            "from": "Lattliv",
+            "to": "mc5"
+        },
+        {
+            "from": "Campus",
+            "to": "mc5"
+        },
+        {
+            "from": "Mr.Pronto",
+            "to": "rc28"
+        },
+        {
+            "from": "King carpets",
+            "to": "rc28"
+        },
+        {
+            "from": "sk-one",
+            "to": "mc6"
+        },
+        {
+            "from": "performex",
+            "to": "mc8"
+        },
+        {
+            "from": "sketchers",
+            "to": "mc8"
+        },
+        {
+            "from": "stride",
+            "to": "mc8"
+        },
+        {
+            "from": "nike",
+            "to": "mc10"
+        },
+        {
+            "from": "Reliance Trends",
+            "to": "mc10"
+        },
+        {
+            "from": "Adidas",
+            "to": "dc35"
+        },
+        {
+            "from": "Puma",
+            "to": "dc34"
+        },
+        {
+            "from": "Lenskart",
+            "to": "mc15"
+        },
+        {
+            "from": "GKB opticals",
+            "to": "mc15"
+        },
+        {
+            "from": "VISION express",
+            "to": "mc15"
+        },
+        {
+            "from": "Specta",
+            "to": "mc16"
+        },
+        {
+            "from": "Saberi's",
+            "to": "mc16"
+        },
+        {
+            "from": "Titan eye plus",
+            "to": "mc16"
+        },
+        {
+            "from": "Trends Footware",
+            "to": "mc16"
+        },
+        {
+            "from": "Show store",
+            "to": "mc17"
+        },
+        {
+            "from": "Metro",
+            "to": "mc17"
+        },
+        {
+            "from": "New-u",
+            "to": "mc18"
+        },
+        {
+            "from": "Unlimited",
+            "to": "mc19"
+        },
+        {
+            "from": "Miniso",
+            "to": "mc19"
+        },
+        {
+            "from": "Maniyar",
+            "to": "mc20"
+        },
+        {
+            "from": "Occult",
+            "to": "mc20"
+        },
+        {
+            "from": "Haldiram's sweets",
+            "to": "mc1"
+        },
+        {
+            "from": "Minilove",
+            "to": "mc2"
+        },
+        {
+            "from": "Balaji Hosiery",
+            "to": "mc2"
+        },
+        {
+            "from": "van hausen inner wear(man",
+            "to": "mc2"
+        },
+        {
+            "from": "u s polo assn (inner wear",
+            "to": "mc3"
+        },
+        {
+            "from": "Amante",
+            "to": "mc3"
+        },
+        {
+            "from": "Jockey Men(inner wear)",
+            "to": "mc3"
+        },
+        {
+            "from": "The Good goods",
+            "to": "mc4"
+        },
+        {
+            "from": "Rushers",
+            "to": "mc4"
+        },
+        {
+            "from": "5 Miles",
+            "to": "mc5"
+        },
+        {
+            "from": "Neeman's",
+            "to": "mc5"
+        },
+        {
+            "from": "Crossword",
+            "to": "mc5"
+        },
+        {
+            "from": "Blissclub",
+            "to": "mc5"
+        },
+        {
+            "from": "cricfuse",
+            "to": "mc6"
+        },
+        {
+            "from": "speedo",
+            "to": "mc6"
+        },
+        {
+            "from": "crocs",
+            "to": "mc7"
+        },
+        {
+            "from": "New Balance",
+            "to": "mc7"
+        },
+        {
+            "from": "reekbok",
+            "to": "mc8"
+        },
+        {
+            "from": "columbia",
+            "to": "mc10"
+        },
+        {
+            "from": "asics",
+            "to": "mc10"
+        },
+        {
+            "from": "Woodlands",
+            "to": "mc10"
+        },
+        {
+            "from": "cafe ritazza",
+            "to": "mc10"
+        },
+        {
+            "from": "Dainel wellinton",
+            "to": "mc10"
+        },
+        {
+            "from": "casio",
+            "to": "mc12"
+        },
+        {
+            "from": "KWC",
+            "to": "mc12"
+        }
+    ]
+}

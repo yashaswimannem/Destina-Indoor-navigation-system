@@ -1,0 +1,102 @@
+/* WelcomePage.css */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+}
+
+/* Main Container */
+.welcome-container {
+    max-width: 600px;
+    padding: 20px;
+}
+
+/* Typing Effect with Blinking Cursor */
+.glow-text {
+    font-size: 3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 10px #fff, 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #00f, 0 0 50px #00f;
+    animation: glow 1.5s infinite alternate;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.blinking-cursor {
+    font-weight: bold;
+    font-size: 3rem;
+    color: #0ff;
+    animation: blink 0.7s steps(2, start) infinite;
+}
+
+/* Glow Animation */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #00f;
+    }
+    to {
+        text-shadow: 0 0 15px #fff, 0 0 25px #0ff, 0 0 35px #0ff, 0 0 45px #00f;
+    }
+}
+
+/* Cursor Blink */
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Fade-in Text */
+.fade-in-text {
+    font-size: 1.2rem;
+    opacity: 0;
+    animation: fadeIn 3s ease-in-out forwards 3s;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Futuristic Neon Button */
+.neon-button {
+    background: transparent;
+    color: #0ff;
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    border: 2px solid #0ff;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    outline: none;
+}
+
+/* Neon Button Hover Effect */
+.neon-button:hover {
+    color: #000;
+    background-color: #0ff;
+    box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #00f;
+}
+
+/* Button Click Effect */
+.neon-button:active {
+    transform: scale(0.95);
+}

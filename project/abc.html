@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indoor Navigation System</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+        }
+        #controls {
+            margin: 10px;
+            text-align: center;
+        }
+        select, button {
+            padding: 8px;
+            font-size: 16px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="controls">
+        <label for="source">Source:</label>
+        <select id="source"></select>
+        
+        <label for="destination">Destination:</label>
+        <select id="destination"></select>
+        
+        <button onclick="findShortestPath()">Find Path</button>
+    </div>
+    
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map', {
+            crs: L.CRS.Simple,
+            minZoom: -2,
+            maxZoom: 1
+        });
+
+        var imageWidth = 1200, imageHeight = 900;
+        var bounds = [[0, 0], [imageHeight, imageWidth]];
+        L.imageOverlay("data/map.png", bounds).addTo(map);
+        map.fitBounds(bounds);
+
+        var stores = {};  // Store ID to coordinates mapping
+        var paths = {};   // Walkable paths from JSON
+        var markers = {};
+        var pathLayer = L.layerGroup().addTo(map);
+
+        function transformCoords(storeX, storeY) {
+            let shiftX = 30;  // Adjust to move left
+            let shiftY = 20;  // Adjust to move up
+
+            let scaledX = (storeX / 1000) * imageWidth - shiftX;
+            let scaledY = imageHeight - ((storeY / 1000) * imageHeight) + shiftY;
+            return [scaledY, scaledX];
+        }
+
+        function loadMallData() {
+            fetch("data/mall_map.json")
+                .then(response => response.json())
+                .then(data => {
+                    var sourceSelect = document.getElementById("source");
+                    var destinationSelect = document.getElementById("destination");
+
+                    data.locations.forEach(store => {
+                        let [newY, newX] = transformCoords(store.x, store.y);
+                        stores[store.id] = [newY, newX];
+
+                        markers[store.id] = L.marker([newY, newX]).addTo(map)
+                            .bindPopup(`<b>${store.id}</b>`);
+
+                        let option1 = new Option(store.id, store.id);
+                        let option2 = new Option(store.id, store.id);
+                        sourceSelect.add(option1);
+                        destinationSelect.add(option2);
+                    });
+
+                    paths = data.paths;  // Walkable paths
+                });
+        }
+
+        function findShortestPath() {
+            var source = document.getElementById("source").value;
+            var destination = document.getElementById("destination").value;
+
+            if (!source || !destination || source === destination) {
+                alert("Please select valid source and destination.");
+                return;
+            }
+
+            let shortestPath = dijkstra(source, destination);
+            if (shortestPath.length === 0) {
+                alert("No valid path found!");
+                return;
+            }
+            drawPath(shortestPath);
+        }
+
+        function dijkstra(start, end) {
+            let distances = {};
+            let prev = {};
+            let pq = new Set(Object.keys(paths));
+
+            for (let node in paths) {
+                distances[node] = Infinity;
+                prev[node] = null;
+            }
+            distances[start] = 0;
+
+            while (pq.size) {
+                let closest = Array.from(pq).reduce((a, b) => distances[a] < distances[b] ? a : b);
+                pq.delete(closest);
+
+                if (closest === end) break;
+
+                for (let neighbor of paths[closest]) {
+                    let alt = distances[closest] + 1;  // Each path has equal weight
+                    if (alt < distances[neighbor]) {
+                        distances[neighbor] = alt;
+                        prev[neighbor] = closest;
+                    }
+                }
+            }
+
+            let path = [];
+            for (let at = end; at !== null; at = prev[at]) {
+                path.push(at);
+            }
+            return path.reverse();
+        }
+
+        function drawPath(path) {
+            pathLayer.clearLayers();
+            if (path.length < 2) return;
+
+            let latlngs = path.map(store => stores[store]);
+            L.polyline(latlngs, { color: 'red', weight: 4 }).addTo(pathLayer);
+        }
+
+        loadMallData();
+    </script>
+
+</body>
+</html>
